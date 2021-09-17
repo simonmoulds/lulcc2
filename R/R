@@ -1,0 +1,2 @@
+allocate.R:    ## TODO: change autoconvert function so mask is optional
+allocate.R:    vals <- .Call("autoconvert", x, mask, prob, categories)

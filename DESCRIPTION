@@ -1,0 +1,81 @@
+Package: lulcc2
+Title: Land Use Change Modelling in R
+Version: 1.0.0
+Author: Simon Moulds <sim.moulds@gmail.com>
+Maintainer: Simon Moulds <sim.moulds@gmail.com>
+Description: Classes and methods for spatially explicit land use change
+    modelling in R.
+Depends:
+    methods,
+    raster,
+    R (>= 3.1.0)
+License: GPL (>= 2)
+LazyData: true
+LinkingTo:
+    Rcpp,
+    Rcpp11,
+    RcppArmadillo
+Imports:
+    Rcpp,
+    ROCR,
+    lattice,
+    rasterVis
+Suggests:
+    caret,
+    rpart,
+    randomForest,
+    gsubfn,
+    Hmisc,
+    plyr,
+    RColorBrewer,
+Collate: 
+    'class-LulcRasterStack.R'
+    'class-PredictiveModelList.R'
+    'class-ExpVarRasterStack.R'
+    'class-NeighbRasterStack.R'
+    'class-Model.R'
+    'class-ThreeMapComparison.R'
+    'AgreementBudget.R'
+    'ExpVarRasterStack.R'
+    'FigureOfMerit.R'
+    'LulcRasterStack.R'
+    'Model.R'
+    'NeighbRasterStack.R'
+    'class-PerformanceList.R'
+    'PerformanceList.R'
+    'class-PredictionList.R'
+    'PredictionList.R'
+    'as.data.frame.R'
+    'PredictiveModelList.R'
+    'RcppExports.R'
+    'ThreeMapComparison.R'
+    'allocate.R'
+    'allow.R'
+    'approxExtrapDemand.R'
+    'c.PredictiveModelList.R'
+    'compareAUC.R'
+    'crop.R'
+    'index.R'
+    'crossTabulate.R'
+    'data.R'
+    'getPredictiveModelInputData.R'
+    'length.R'
+    'lulcc2-package.R'
+    'names.R'
+    'partition.R'
+    'plot.AgreementBudget.R'
+    'plot.FigureOfMerit.R'
+    'plot.Performance.R'
+    'plot.R'
+    'predict.R'
+    'resample.R'
+    'show.R'
+    'subset.R'
+    'summary.R'
+    'total.R'
+SystemRequirements: c++11
+Packaged: 2015-08-19 08:56:15 UTC; simon
+NeedsCompilation: yes
+Repository: CRAN
+Date/Publication: 2015-08-19 11:50:07
+RoxygenNote: 6.0.1

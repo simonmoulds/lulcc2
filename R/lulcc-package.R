@@ -1,0 +1,256 @@
+#' @import methods raster
+NULL
+
+#' @importFrom stats binomial glm na.omit runif complete.cases setNames
+NULL
+
+#' @importFrom Rcpp sourceCpp
+NULL
+
+#' lulcc2: land use change modelling in R
+#'
+#' The lulcc2 package is an open and extensible framework for land use change
+#' modelling in R.
+#'
+#' The aims of the package are as follows:
+#'
+#' \enumerate{
+#'   \item to improve the reproducibility of scientific results and encourage
+#'     reuse of code within the land use change modelling community
+#'   \item to make it easy to directly compare and combine different model
+#'     structures
+#'   \item to allow users to perform several aspects of the modelling process
+#'     within the same environment
+#' }
+#' 
+#' To achieve these aims the package utilises an object-oriented approach based
+#' on the S4 system, which provides a formal structure for the modelling
+#' framework. Generic methods implemented for the \code{lulcc2} classes include
+#' \code{summary}, \code{show}, and \code{plot}.
+#'
+#' Land use change models are represented by objects inheriting from the
+#' superclass \code{Model}. This class is designed to represent general
+#' information required by all models while specific models are represented by
+#' its subclasses. Currently the package includes two discrete land use change
+#' models: an implementation of the Change in Land Use and its Effects at Small
+#' Regional extent (CLUE-S) model (Verburg et al., 2002) (class
+#' \code{CluesModel}) and an ordered procedure based on the algorithm described
+#' by Fuchs et al. (2013) but modified to allow stochastic transitions (class
+#' \code{OrderedModel}). An implementation of the continuous land use change
+#' model CLUE (Veldkamp and Fresco, 1996; Verburg and Bouma, 1999) is also
+#' included.
+#'
+#' The main input to inductive land use change models is a set of predictive
+#' models relating observed land use or land use change to spatially explicit
+#' explanatory variables. A predictive model is usually obtained for each
+#' category or transition. In lulcc2 these models are represented by the class
+#' \code{PredictiveModelList}. Currently lulcc2 supports binary logistic regression,
+#' provided by base R (\code{glm}), recursive partitioning and regression trees,
+#' provided by package \code{rpart} and random forest, provided by package
+#' \code{randomForest}. To a large extent the success of the allocation routine
+#' depends on the strength of the predictive models. 
+#'
+#' To validate model output lulcc2 includes a method developed by Pontius et al.
+#' (2011) that simultaneously compares a reference map for time 1, a reference
+#' map for time 2 and a simulated map for time 2 at multiple resolutions. In
+#' lulcc2 the results of the comparison are represented by the class
+#' \code{ThreeMapComparison}. From objects of this class it is straightforward
+#' to extract information about different sources of agreement and disagreement,
+#' represented by the class \code{AgreementBudget}, which can then be plotted. The
+#' results of the comparison are conveniently summarised by the figure of merit,
+#' represented by the class \code{FigureOfMerit}.
+#'
+#' In addition to the core functionality described above, lulcc2 inludes several
+#' utility functions to assist with the model building process. Two example
+#' datasets are also included. 
+#'
+#' @author Simon Moulds
+#' @docType package
+#' @name lulcc2-package
+#'
+#' @references
+#' Fuchs, R., Herold, M., Verburg, P.H., and Clevers, J.G.P.W. (2013). A
+#' high-resolution and harmonized model approach for reconstructing and analysing
+#' historic land changes in Europe, Biogeosciences, 10:1543-1559.
+#' 
+#' Pontius Jr, R.G., Peethambaram, S., Castella, J.C. (2011).
+#' Comparison of three maps at multiple resol utions: a case study of land change
+#' simulation in Cho Don District, Vietnam. Annals of the Association of American
+#' Geographers 101(1): 45-62.
+#'
+#' Veldkamp, A., & Fresco, L. O. (1996). CLUE-CR: an integrated multi-scale model
+#' to simulate land use change scenarios in Costa Rica. Ecological modelling,
+#' 91(1), 231-248.
+#'
+#' Verburg, P.H., & Bouma, J. (1999). Land use change under conditions of high
+#' population pressure: the case of Java. Global environmental change, 9(4),
+#' 303-312.
+#'
+#' Verburg, P.H., Soepboer, W., Veldkamp, A., Limpiada, R., Espaldon, V., Mastura,
+#' S.S. (2002). Modeling the spatial dynamics of regional land use: the CLUE-S
+#' model. Environmental management, 30(3):391-405.
+#'
+#' @examples
+#'
+#' \dontrun{
+#'
+#' ## Plum Island Ecosystems
+#' 
+#' data(pie)
+#' 
+#' ## Observed maps
+#' lu <- DiscreteLulcRasterStack(x=stack(pie[1:3]),
+#'                               categories=c(1,2,3),
+#'                               labels=c("Forest","Built","Other"),
+#'                               t=c(0,6,14))
+#' plot(lu)
+#' 
+#' crossTabulate(x=lu, times=c(0,14))
+#' 
+#' ## Explanatory variables
+#' idx <- data.frame(var=c("ef_001","ef_002","ef_003"),
+#'                   yr=c(0,0,0),
+#'                   dynamic=c(FALSE,FALSE,FALSE))
+#' idx
+#' 
+#' ef <- ExpVarRasterStack(x=stack(pie[4:6]), index=idx)
+#' 
+#' part <- partition(x=lu, size=0.1, spatial=TRUE, t=0)
+#' train.data <- getPredictiveModelInputData(lu=lu,
+#'                                           ef=ef,
+#'                                           cells=part[["train"]],
+#'                                           t=0)
+#' 
+#' ## predictive modelling
+#' forest.form <- as.formula("Forest ~ ef_001 + ef_002")
+#' built.form <- as.formula("Built ~ ef_001 + ef_002 + ef_003")
+#' other.form <- as.formula("Other ~ ef_001 + ef_002")
+#' 
+#' library(randomForest)
+#' library(rpart)
+#' 
+#' forest.glm <- glm(forest.form, family=binomial, data=train.data)
+#' forest.rprt <- rpart(forest.form, data=train.data)
+#' forest.rf <- randomForest(forest.form, method="class", data=train.data)
+#' 
+#' built.glm <- glm(built.form, family=binomial, data=train.data)
+#' built.rprt <- rpart(built.form, data=train.data)
+#' built.rf <- randomForest(built.form, method="class", data=train.data)
+#' 
+#' other.glm <- glm(other.form, family=binomial, data=train.data)
+#' other.rprt <- rpart(other.form, data=train.data)
+#' other.rf <- randomForest(other.form, method="class", data=train.data)
+#' 
+#' ## Binomial logistic regression
+#' glm.mods <- PredictiveModelList(list(forest.glm, built.glm, other.glm),
+#'                                 categories=lu@@categories,
+#'                                 labels=lu@@labels)
+#' 
+#' ## Recursive partitioning and regression trees
+#' rprt.mods <- PredictiveModelList(list(forest.rprt, built.rprt, other.rprt),
+#'                                  categories=lu@@categories,
+#'                                  labels=lu@@labels)
+#' 
+#' ## Random forests
+#' rf.mods <- PredictiveModelList(list(forest.rf, built.rf, other.rf),
+#'                                categories=lu@@categories,
+#'                                labels=lu@@labels)
+#' 
+#' test.data <- getPredictiveModelInputData(lu=lu,
+#'                                          ef=ef,
+#'                                          cells=part[["test"]],
+#'                                          t=0)
+#' 
+#' glm.pred <- PredictionList(models=glm.mods, newdata=test.data) 
+#' glm.perf <- PerformanceList(pred=glm.pred, measure="rch") 
+#' 
+#' rprt.pred <- PredictionList(models=rprt.mods, newdata=test.data) 
+#' rprt.perf <- PerformanceList(pred=rprt.pred, measure="rch") 
+#' 
+#' rf.pred <- PredictionList(models=rf.mods, newdata=test.data) 
+#' rf.perf <- PerformanceList(pred=rf.pred, measure="rch") 
+#' 
+#' p <- plot(list(glm=glm.perf, rpart=rprt.perf, rf=rf.perf))
+#' 
+#' ## Probability maps
+#' all.data <- as.data.frame(x=ef, cells=part[["all"]]) 
+#' probmaps <- predict(object=glm.mods, 
+#'                     newdata=all.data, 
+#'                     data.frame=TRUE)
+#' 
+#' points <- rasterToPoints(lu[[1]], spatial=TRUE) 
+#' probmaps <- SpatialPointsDataFrame(points, probmaps) 
+#' probmaps <- rasterize(x=probmaps, y=lu[[1]], 
+#'                       field=names(probmaps)) 
+#' 
+#' p <- levelplot(probmaps, layout=c(2,2), margin=FALSE)
+#' 
+#' ## Demand scenario
+#' dmd <- approxExtrapDemand(lu=lu, tout=0:14)
+#' 
+#' ## CLUE-S modelling
+#' clues.model <- CluesModel(observed.lulc=lu, 
+#'                           explanatory.variables=ef,
+#'                           predictive.models=glm.mods,
+#'                           time=0:14,
+#'                           demand=dmd,
+#'                           history=NULL,
+#'                           mask=NULL,
+#'                           neighbourhood=NULL,
+#'                           transition.rules=matrix(data=1, nrow=3, ncol=3),
+#'                           neighbourhood.rules=NULL,
+#'                           elasticity=c(0.2,0.2,0.2),
+#'                           iteration.factor=0.00001,
+#'                           max.iteration=1000,
+#'                           max.difference=5,
+#'                           ave.difference=5)
+#' 
+#' clues.result <- allocate(clues.model)
+#' 
+#' ## Ordered modelling
+#' ordered.model <- OrderedModel(observed.lulc=lu, 
+#'                               explanatory.variables=ef,
+#'                               predictive.models=glm.mods,
+#'                               time=0:14,
+#'                               demand=dmd,
+#'                               transition.rules=matrix(data=1, 3, 3),
+#'                               order=c(2,1,3))
+#' 
+#' ordered.result <- allocate(ordered.model, stochastic=FALSE)
+#' 
+#' ## Validation
+#' 
+#' clues.tabs <- ThreeMapComparison(x=lu[[1]],
+#'                                    x1=lu[[3]],
+#'                                    y1=clues.result[[15]],
+#'                                    factors=2^(1:8), 
+#'                                    categories=lu@@categories,
+#'                                    labels=lu@@labels) 
+#' 
+#' clues.agr <- AgreementBudget(x=clues.tabs) 
+#' clues.fom <- FigureOfMerit(x=clues.tabs) 
+#' ordered.tabs <- ThreeMapComparison(x=lu[[1]],
+#'                                    x1=lu[[3]],
+#'                                    y1=ordered.result[[15]],
+#'                                    factors=2^(1:8),
+#'                                    categories=lu@@categories,
+#'                                    labels=lu@@labels)
+#'                                  
+#' ordered.agr <- AgreementBudget(x=ordered.tabs)
+#' ordered.fom <- FigureOfMerit(x=ordered.tabs)
+#' 
+#' p1 <- plot(clues.agr, from=1, to=2)
+#' p2 <- plot(ordered.agr, from=1, to=2)
+#' 
+#' agr.p <- c("CLUE-S"=p1, Ordered=p2, layout=c(1,2))
+#' agr.p
+#' 
+#' p1 <- plot(clues.fom, from=1, to=2)
+#' p2 <- plot(ordered.fom, from=1, to=2)
+#' 
+#' fom.p <- c("CLUE-S"=p1, Ordered=p2, layout=c(1,2))
+#' fom.p
+#'
+#' }
+#'
+NULL

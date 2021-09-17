@@ -5,9 +5,9 @@
 \title{CLUE-S}
 \usage{
 clues(lu0, lu0.vals, tprob, nb = NULL, nb.rules = NULL,
-  transition.rules = NULL, hist.vals = NULL, mask.vals = NULL, demand,
-  categories, elasticity, iteration.factor, max.iteration, max.difference,
-  ave.difference, ...)
+  transition.rules = NULL, hist.vals = NULL, mask.vals = NULL,
+  demand, categories, elasticity, iteration.factor, max.iteration,
+  max.difference, ave.difference, ...)
 }
 \arguments{
 \item{lu0}{RasterLayer showing initial land use}

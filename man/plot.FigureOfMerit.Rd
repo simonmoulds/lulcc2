@@ -7,12 +7,12 @@
 \title{Plot method for FigureOfMerit objects}
 \usage{
 \method{plot}{FigureOfMerit}(x, y, ..., from, to,
-  col = RColorBrewer::brewer.pal(8, "Set2"), type = "b", key, scales, xlab,
-  ylab)
+  col = RColorBrewer::brewer.pal(8, "Set2"), type = "b", key, scales,
+  xlab, ylab)
 
 \S4method{plot}{FigureOfMerit,ANY}(x, y, ..., from, to,
-  col = RColorBrewer::brewer.pal(8, "Set2"), type = "b", key, scales, xlab,
-  ylab)
+  col = RColorBrewer::brewer.pal(8, "Set2"), type = "b", key, scales,
+  xlab, ylab)
 }
 \arguments{
 \item{x}{a FigureOfMerit object}

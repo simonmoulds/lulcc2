@@ -12,8 +12,8 @@ partition(x, ...)
 
 \S4method{partition}{RasterLayer}(x, size = 0.5, spatial = TRUE, ...)
 
-\S4method{partition}{DiscreteLulcRasterStack}(x, size = 0.5, spatial = TRUE,
-  t, ...)
+\S4method{partition}{DiscreteLulcRasterStack}(x, size = 0.5,
+  spatial = TRUE, t, ...)
 
 \S4method{partition}{ContinuousLulcRasterStack}(x, size = 0.5,
   spatial = TRUE, ...)

@@ -5,8 +5,8 @@
 \title{CLUE}
 \usage{
 clue(lu0.vals, regr, demand, elasticity, change.rule, min.elasticity,
-  max.elasticity, min.change, max.change, min.value, max.value, max.iteration,
-  max.difference, cell.area, ncell, ncode)
+  max.elasticity, min.change, max.change, min.value, max.value,
+  max.iteration, max.difference, cell.area, ncell, ncode)
 }
 \arguments{
 \item{lu0.vals}{matrix containing non-NA values from \code{lu0}}

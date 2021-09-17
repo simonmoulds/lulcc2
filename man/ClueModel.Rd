@@ -4,8 +4,8 @@
 \alias{ClueModel}
 \title{Create a ClueModel object}
 \usage{
-ClueModel(observed.lulc, explanatory.variables, predictive.models, time, demand,
-  elasticity = 0.1, change.rule, min.elasticity = 0.001,
+ClueModel(observed.lulc, explanatory.variables, predictive.models, time,
+  demand, elasticity = 0.1, change.rule, min.elasticity = 0.001,
   max.elasticity = 1.5, min.value, max.value, min.change, max.change,
   max.iteration = 1000, max.difference, cell.area)
 }

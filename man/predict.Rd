@@ -4,8 +4,8 @@
 \alias{predict.PredictiveModelList}
 \title{Predict allocation suitability}
 \usage{
-\method{predict}{PredictiveModelList}(object, newdata, data.frame = FALSE,
-  ...)
+\method{predict}{PredictiveModelList}(object, newdata,
+  data.frame = FALSE, ...)
 }
 \arguments{
 \item{object}{a PredictiveModelList object}

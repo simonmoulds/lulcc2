@@ -7,10 +7,12 @@
 \title{Plot method for AgreementBudget objects}
 \usage{
 \method{plot}{AgreementBudget}(x, y, from, to,
-  col = RColorBrewer::brewer.pal(5, "Set2"), key, scales, xlab, ylab, ...)
+  col = RColorBrewer::brewer.pal(5, "Set2"), key, scales, xlab, ylab,
+  ...)
 
 \S4method{plot}{AgreementBudget,ANY}(x, y, from, to,
-  col = RColorBrewer::brewer.pal(5, "Set2"), key, scales, xlab, ylab, ...)
+  col = RColorBrewer::brewer.pal(5, "Set2"), key, scales, xlab, ylab,
+  ...)
 }
 \arguments{
 \item{x}{an AgreementBudget object}

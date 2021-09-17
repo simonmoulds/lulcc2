@@ -7,12 +7,12 @@
 \title{Plot method for PerformanceList objects}
 \usage{
 \method{plot}{PerformanceList}(x, y, multipanel = TRUE, type = "l",
-  abline = list(c(0, 1), col = "grey"), col = RColorBrewer::brewer.pal(9,
-  "Set1"), key.args = NULL, ...)
+  abline = list(c(0, 1), col = "grey"),
+  col = RColorBrewer::brewer.pal(9, "Set1"), key.args = NULL, ...)
 
 \S4method{plot}{list,ANY}(x, y, multipanel = TRUE, type = "l",
-  abline = list(c(0, 1), col = "grey"), col = RColorBrewer::brewer.pal(9,
-  "Set1"), key.args = NULL, ...)
+  abline = list(c(0, 1), col = "grey"),
+  col = RColorBrewer::brewer.pal(9, "Set1"), key.args = NULL, ...)
 }
 \arguments{
 \item{x}{either a single PerformanceList object or a list of these. If a list is

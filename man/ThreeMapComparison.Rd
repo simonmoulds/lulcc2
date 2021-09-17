@@ -8,8 +8,8 @@
 \usage{
 ThreeMapComparison(x, x1, y1, ...)
 
-\S4method{ThreeMapComparison}{RasterLayer,RasterLayer,RasterLayer}(x, x1, y1,
-  factors, categories, labels, ...)
+\S4method{ThreeMapComparison}{RasterLayer,RasterLayer,RasterLayer}(x, x1,
+  y1, factors, categories, labels, ...)
 }
 \arguments{
 \item{x}{either a RasterLayer of observed land use at time 0 or an object

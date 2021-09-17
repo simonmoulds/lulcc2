@@ -5,8 +5,8 @@
 \title{Ordered allocation}
 \usage{
 ordered_old(lu0, lu0.vals, tprob, nb = NULL, nb.rules = NULL,
-  transition.rules = NULL, hist.vals = NULL, mask.vals = NULL, demand,
-  categories, order, stochastic)
+  transition.rules = NULL, hist.vals = NULL, mask.vals = NULL,
+  demand, categories, order, stochastic)
 }
 \arguments{
 \item{lu0}{RasterLayer showing initial land use}
